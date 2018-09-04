@@ -1,0 +1,40 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: serverless-auth
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: go1.x
+  region: us-west-1
+
+package:
+  exclude:
+    - ./**
+  include:
+    - ./bin/**
+
+# The `functions` block defines what code to deploy
+functions:
+  authorize:
+    handler: bin/authorize
+  getCats:
+    handler: bin/cats
+    events:
+      - http:
+          path: cats
+          method: get
+          cors: true
+  getPangolins:
+    handler: bin/pangolins
+    events:
+      - http:
+          path: pangolins
+          method: get
+          cors: true
+          authorizer: authorize
